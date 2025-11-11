@@ -497,3 +497,9 @@ template {
 [hidden] {
   display: none;
 }
+
+
+/* 研究業績タブのスクロール枠を拡大 */
+#academic .swiper.mySwiper2 .swiper-slide[data-simplebar]{
+  max-height: 640px;  /* 例：今より大きく。520px, 600px など任意 */
+}
