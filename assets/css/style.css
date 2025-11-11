@@ -1352,14 +1352,27 @@ footer {
   font-feature-settings: "tnum";
 }
 
+@media (min-width: 992px){
+  #academic .academic-inner .mySwiper2{
+    height: clamp(640px, 80vh, 1100px) !important;
+  }
+  #academic .academic-inner .mySwiper2 .swiper-wrapper,
+  #academic .academic-inner .mySwiper2 .swiper-slide,
+  #academic .academic-inner .mySwiper2 .swiper-slide[data-simplebar]{
+    height: 100% !important;
+    max-height: none !important;
+  }
+}
+
 /* 研究業績タブのスクロール枠を拡大 */
 #academic .swiper.mySwiper2 .swiper-slide[data-simplebar]{
-  max-height: 640px;  /* 例：今より大きく。520px, 600px など任意 */
+  max-height: 960px;  /* 例：今より大きく。520px, 600px など任意 */
 }
 
 /* 研究業績：初期表示は10件、11件目以降は隠す */
-#academic ul.paper > li.list-item { display: list-item; }          /* デフォルト表示 */
-#academic ul.paper > li.list-item:nth-of-type(n+11) { display: none; }
+#academic ul.paper > li.list-item { display: list-item !important; }
+#academic ul.paper > li.list-item[hidden] { display: none !important; }
+
 
 /* 親に .is-open が付いたら全件表示（= もっと見る 後） */
 #academic .swiper-slide.is-open ul.paper > li.list-item { display: list-item; }
