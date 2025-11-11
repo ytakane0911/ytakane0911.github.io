@@ -70,6 +70,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) 「もっと見る」ボタンを全削除（念のため）
+  document.querySelectorAll('#academic .load-more').forEach(btn => btn.remove());
+
+  // 2) すべての項目を強制的に可視化（JSが hidden / inline style を付けても無効化）
+  const unhideAll = (root=document) => {
+    root.querySelectorAll('#academic ul.paper > li.list-item').forEach(li => {
+      li.hidden = false;                   // hidden属性を外す
+      li.style.removeProperty('display');  // inlineの display:none を解除
+    });
+    // 3) 番号（方法B：CSSカウンタ）を合計件数Nからの降順に維持
+    root.querySelectorAll('#academic ul.paper').forEach(ul => {
+      const total = ul.querySelectorAll(':scope > li.list-item').length;
+      ul.style.counterReset = `paper ${total + 1}`;
+    });
+  };
+  unhideAll();
+
+  // 4) テンプレ側がタブ切替などで再度"隠し"を適用しても即座に戻すための監視（保険）
+  const target = document.querySelector('#academic .mySwiper2 .swiper-wrapper');
+  if (target && 'MutationObserver' in window) {
+    new MutationObserver(() => unhideAll()).observe(target, {
+      childList: true, subtree: true, attributes: true,
+      attributeFilter: ['hidden', 'style', 'class']
+    });
+  }
+});
+</script>
+
   </head>
 
   <!-- Google tag (gtag.js) -->
