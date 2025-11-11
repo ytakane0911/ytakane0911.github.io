@@ -525,24 +525,3 @@
     }
   });
 })();
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // 各カテゴリごとに合計件数 N を数えて、counter-reset を N+1 に設定
-  document.querySelectorAll('#academic ul.paper').forEach(ul => {
-    const total = ul.querySelectorAll('li.list-item').length;
-    ul.style.counterReset = `paper ${total + 1}`;
-  });
-
-  // もし「もっと見る」が DOM に新規LIを追加する実装なら、クリック後に再計算
-  document.querySelectorAll('#academic .load-more').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const ul = btn.closest('.swiper-slide').querySelector('ul.paper');
-      if (ul) {
-        const total = ul.querySelectorAll('li.list-item').length;
-        ul.style.counterReset = `paper ${total + 1}`;
-      }
-    });
-  });
-});
-</script>
