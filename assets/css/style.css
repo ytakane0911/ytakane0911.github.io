@@ -1332,3 +1332,22 @@ footer {
     width: 40.972vw
   }
 }
+
+/* ULのまま降順番号を描画する（CSSカウンタ） */
+#academic ul.paper {
+  list-style: none;               /* デフォルトのマーカーを消す */
+}
+#academic ul.paper .list-item {
+  position: relative;
+  padding-left: 3em;              /* 番号ぶんの左余白 */
+  counter-increment: paper -1;    /* 1つ進むごとに -1 する（降順） */
+}
+#academic ul.paper .list-item::before {
+  content: counter(paper) ". ";   /* 表示形式はお好みで */
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: .65;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
