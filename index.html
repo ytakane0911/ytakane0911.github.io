@@ -70,45 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const INITIAL_VISIBLE = 10; // ← ここを変えれば件数変更可（例：10）
-
-  document.querySelectorAll('#academic .swiper-slide').forEach(slide => {
-    const ul = slide.querySelector('ul.paper');
-    if (!ul) return;
-
-    // 1) 既存JS/CSSによる非表示をクリアしてから、10件ルールを適用
-    const items = Array.from(ul.querySelectorAll(':scope > li.list-item'));
-    const total = items.length;
-
-    // 既存の hidden や inline style を一旦解除（テンプレJSの影響をリセット）
-    items.forEach(li => { li.hidden = false; li.style.removeProperty('display'); });
-
-    // 初期表示：10件だけ表示、11件目以降を隠す
-    items.forEach((li, i) => { li.hidden = i >= INITIAL_VISIBLE; });
-
-    // 2) 降順番号（方法B）との整合：合計件数Nから始まるよう開始値を N+1 に
-    ul.style.counterReset = `paper ${total + 1}`;
-
-    // 3) 「もっと見る」：全件表示 → ボタンを消す
-    const btn = slide.querySelector('.load-more');
-    if (btn) {
-      if (total <= INITIAL_VISIBLE) {
-        btn.remove();   // 10件以下ならボタン不要
-      } else {
-        btn.addEventListener('click', () => {
-          items.forEach(li => { li.hidden = false; });
-          btn.remove();
-          // 念のため（件数が変動するテンプレの場合の保険）
-          ul.style.counterReset = `paper ${items.length + 1}`;
-        }, { once: true });
-      }
-    }
-  });
-});
-</script>
-
   </head>
 
   <!-- Google tag (gtag.js) -->
