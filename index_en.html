@@ -48,6 +48,28 @@
     <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
     <script src="./assets/js/library.js"></script>
     <script src="./assets/js/script.js"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 各カテゴリごとに合計件数 N を数えて、counter-reset を N+1 に設定
+  document.querySelectorAll('#academic ul.paper').forEach(ul => {
+    const total = ul.querySelectorAll('li.list-item').length;
+    ul.style.counterReset = `paper ${total + 1}`;
+  });
+
+  // もし「もっと見る」が DOM に新規LIを追加する実装なら、クリック後に再計算
+  document.querySelectorAll('#academic .load-more').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ul = btn.closest('.swiper-slide').querySelector('ul.paper');
+      if (ul) {
+        const total = ul.querySelectorAll('li.list-item').length;
+        ul.style.counterReset = `paper ${total + 1}`;
+      }
+    });
+  });
+});
+</script>
+
   </head>
 
   <!-- Google tag (gtag.js) -->
@@ -572,7 +594,8 @@
                         2025:
                         The photovoltaic heat island effect in Tokyo: Morphological dependence and spatiotemporal dynamics of PV-induced urban warming.
                         <i>Building and Environment</i>,
-                        in press.
+                        <b>288</b>,
+                        113941.
                         doi:<a href="https://doi.org/10.1016/j.buildenv.2025.113941" target="_blank"> <font color="#1a55ad">10.1016/j.buildenv.2025.113941</font> </a>
                     </li>
                     <li class="list-item">
