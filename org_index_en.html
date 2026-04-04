@@ -70,28 +70,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) 「もっと見る」ボタンを全削除（念のため）
+  document.querySelectorAll('#academic .load-more').forEach(btn => btn.remove());
 
-    <style>
-      #academic ul.paper > li.list-item,
-      #academic ul.paper > li.list-item[hidden] {
-        display: list-item !important;
-      }
-      #academic .load-more {
-        display: none !important;
-      }
-    </style>
+  // 2) すべての項目を強制的に可視化（JSが hidden / inline style を付けても無効化）
+  const unhideAll = (root=document) => {
+    root.querySelectorAll('#academic ul.paper > li.list-item').forEach(li => {
+      li.hidden = false;                   // hidden属性を外す
+      li.style.removeProperty('display');  // inlineの display:none を解除
+    });
+    // 3) 番号（方法B：CSSカウンタ）を合計件数Nからの降順に維持
+    root.querySelectorAll('#academic ul.paper').forEach(ul => {
+      const total = ul.querySelectorAll(':scope > li.list-item').length;
+      ul.style.counterReset = `paper ${total + 1}`;
+    });
+  };
+  unhideAll();
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4DEY03WGN"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-G4DEY03WGN');
-    </script>
+  // 4) テンプレ側がタブ切替などで再度"隠し"を適用しても即座に戻すための監視（保険）
+  const target = document.querySelector('#academic .mySwiper2 .swiper-wrapper');
+  if (target && 'MutationObserver' in window) {
+    new MutationObserver(() => unhideAll()).observe(target, {
+      childList: true, subtree: true, attributes: true,
+      attributeFilter: ['hidden', 'style', 'class']
+    });
+  }
+});
+</script>
 
   </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4DEY03WGN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-G4DEY03WGN');
+  </script>
 
   <!-- START ここからデザインの要素を入れていく -->
   <body>
@@ -234,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               </div>
             </li>
+          </li>
           <li class="theme-item">
             <h3 class="h3-number">Mechanism of heat wave and urban heat island in urban areas</h3>
             <div class="theme-body">
@@ -314,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
               </div>
             </li>
+          </li>
           <li class="theme-item">
             <h3 class="h3-number"> </h3>
             <div class="theme-body">
@@ -616,7 +637,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <b>22</b>,
                         5.
                         doi:<a href="https://doi.org/10.1007/s44393-025-00005-9" target="_blank"> <font color="#1a55ad">10.1007/s44393-025-00005-9</font> </a>
-                    </li>
                     <li class="list-item">
                         Sun, Y., <b><u>Y. Takane</u></b>, K. Yamaguchi, and T. Ihara,
                         2026:
