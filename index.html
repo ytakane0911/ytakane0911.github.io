@@ -70,47 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // 1) 「もっと見る」ボタンを全削除（念のため）
-  document.querySelectorAll('#academic .load-more').forEach(btn => btn.remove());
+    <style>
+      #academic ul.paper > li.list-item,
+      #academic ul.paper > li.list-item[hidden] {
+        display: list-item !important;
+      }
+      #academic .load-more {
+        display: none !important;
+      }
+    </style>
 
-  // 2) すべての項目を強制的に可視化（JSが hidden / inline style を付けても無効化）
-  const unhideAll = (root=document) => {
-    root.querySelectorAll('#academic ul.paper > li.list-item').forEach(li => {
-      li.hidden = false;                   // hidden属性を外す
-      li.style.removeProperty('display');  // inlineの display:none を解除
-    });
-    // 3) 番号（方法B：CSSカウンタ）を合計件数Nからの降順に維持
-    root.querySelectorAll('#academic ul.paper').forEach(ul => {
-      const total = ul.querySelectorAll(':scope > li.list-item').length;
-      ul.style.counterReset = `paper ${total + 1}`;
-    });
-  };
-  unhideAll();
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4DEY03WGN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  // 4) テンプレ側がタブ切替などで再度"隠し"を適用しても即座に戻すための監視（保険）
-  const target = document.querySelector('#academic .mySwiper2 .swiper-wrapper');
-  if (target && 'MutationObserver' in window) {
-    new MutationObserver(() => unhideAll()).observe(target, {
-      childList: true, subtree: true, attributes: true,
-      attributeFilter: ['hidden', 'style', 'class']
-    });
-  }
-});
-</script>
-
+      gtag('config', 'G-G4DEY03WGN');
+    </script>
   </head>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G4DEY03WGN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-G4DEY03WGN');
-  </script>
 
   <!-- START ここからデザインの要素を入れていく -->
   <body>
@@ -2333,14 +2313,15 @@ document.addEventListener('DOMContentLoaded', () => {
                   <p>takane.yuya at nies.go.jp</p>
                 </div>
               </div>
-<iframe
-  class="googlemap"
+              <iframe
+                class="googlemap"
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3225.7779803056646!2d140.119633!3d36.050124!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60220cb46b7aadf3%3A0x38f8fddde7c411e5!2z44CSMzA1LTAwNTMg6Iyo5Z-O55yM44Gk44GP44Gw5biC5bCP6YeO5bed77yR77yW4oiS77yS!5e0!3m2!1sja!2sjp!4v1749786936051!5m2!1sja!2sjp
-  style="border:0"
-  allowfullscreen=""
-  loading="lazy"
-  referrerpolicy="no-referrer-when-downgrade">
-</iframe>
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              >
+              </iframe>
             </div>
           </div>
         </section>
