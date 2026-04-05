@@ -1557,3 +1557,60 @@ section {
     padding: 20px;
   }
 }
+
+
+.intro-card {
+  margin: 28px 30px 0;
+  padding: 28px;
+  border: 1px solid #e5ebf4;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fbff 100%);
+  box-shadow: 0 16px 36px rgba(20, 40, 80, 0.08);
+}
+
+.intro-card-role {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2269d3;
+  margin-bottom: 10px;
+}
+
+.intro-card-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1f2f46;
+  margin-bottom: 14px;
+}
+
+.intro-card-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #42536b;
+}
+
+.intro-card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.intro-card-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #d8e3f2;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-link);
+}
+
+@media (min-width: 769px) {
+  .intro-card {
+    margin: 36px 130px 0;
+    padding: 36px;
+  }
+}
