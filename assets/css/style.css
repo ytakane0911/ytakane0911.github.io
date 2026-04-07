@@ -1044,7 +1044,7 @@ footer {
   }
 
   h2 {
-    font-size: 45px
+    font-size: 40px
   }
 
   h2:after {
@@ -1576,7 +1576,7 @@ section {
 }
 
 .intro-card-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   line-height: 1.35;
   color: #1f2f46;
