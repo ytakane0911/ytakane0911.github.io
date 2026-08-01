@@ -1,0 +1,24 @@
+{
+  "version": "v3.7.1",
+  "checks": {
+    "index.html_title_is_log": true,
+    "index.html_sidebar_brand_is_log": true,
+    "index.html_sidebar_has_no_subtitle": true,
+    "index.html_no_duplicate_ids": true,
+    "index_en.html_title_is_log": true,
+    "index_en.html_sidebar_brand_is_log": true,
+    "index_en.html_sidebar_has_no_subtitle": true,
+    "index_en.html_no_duplicate_ids": true,
+    "topics.html_title_is_log": true,
+    "japanese_achievement_count_preserved": true,
+    "english_achievement_count_preserved": true,
+    "no_git_directory": true,
+    "api_key_not_embedded": true,
+    "javascript_syntax_ok": true
+  },
+  "counts": {
+    "index.html_achievement_records": 170,
+    "index_en.html_achievement_records": 109
+  },
+  "all_passed": true
+}

@@ -1,0 +1,92 @@
+{
+  "ja": {
+    "old_counts": {
+      "news": 17,
+      "themes": 4,
+      "projects": 7,
+      "selected": 5,
+      "topics": 9
+    },
+    "new_counts": {
+      "news": 17,
+      "themes": 4,
+      "projects": 7,
+      "selected": 5,
+      "topics": 9
+    },
+    "achievements": {
+      "paper": 52,
+      "grant": 24,
+      "award": 8,
+      "book": 4,
+      "review": 19,
+      "press": 6,
+      "outreach": 4,
+      "intl": 25,
+      "service": 28
+    },
+    "achievement_total": 170
+  },
+  "en": {
+    "old_counts": {
+      "news": 3,
+      "themes": 4,
+      "projects": 3,
+      "selected": 5
+    },
+    "new_counts": {
+      "news": 3,
+      "themes": 4,
+      "projects": 3,
+      "selected": 5,
+      "topics": 3
+    },
+    "achievements": {
+      "paper": 37,
+      "grant": 14,
+      "award": 5,
+      "intl": 25,
+      "service": 28
+    },
+    "achievement_total": 109
+  },
+  "images": {
+    "old": 43,
+    "new": 43,
+    "missing": [],
+    "changed": []
+  },
+  "pages": {
+    "index.html": {
+      "broken_local_refs": [],
+      "duplicate_ids": []
+    },
+    "index_en.html": {
+      "broken_local_refs": [],
+      "duplicate_ids": []
+    },
+    "topics.html": {
+      "broken_local_refs": [],
+      "duplicate_ids": []
+    },
+    "admin/openalex-metrics-updater.html": {
+      "broken_local_refs": [],
+      "duplicate_ids": []
+    }
+  },
+  "missing_valid_original_urls": [],
+  "related_links_restored": 8,
+  "api_key_literal_hits": [],
+  "package": {
+    "file_count": 70,
+    "largest_file_bytes": 13367128,
+    "largest_file": "assets/images/DSC00158.JPG",
+    "has_git_dir": false,
+    "has_index_root": true,
+    "has_nojekyll": true,
+    "workflows": [
+      ".github/workflows/deploy-pages.yml",
+      ".github/workflows/update-publication-metrics.yml"
+    ]
+  }
+}

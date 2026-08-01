@@ -1,0 +1,28 @@
+{
+  "index.html": {
+    "duplicate_ids": [],
+    "title": "髙根雄也｜都市気候・建物エネルギー・極端高温"
+  },
+  "index_en.html": {
+    "duplicate_ids": [],
+    "title": "Yuya Takane | Urban climate, building energy and extreme heat"
+  },
+  "admin/openalex-metrics-updater.html": {
+    "duplicate_ids": [],
+    "title": "OpenAlex論文指標更新｜Yuya Takane"
+  },
+  "missing_local_files": [],
+  "metrics_schema": 2,
+  "metrics_records": 47,
+  "metrics_populated": 0,
+  "syntax": {
+    "site_js": "ok",
+    "admin_js": "ok",
+    "python": "ok"
+  },
+  "inline_metrics_after_citation": true,
+  "local_cache_merge": true,
+  "github_secret_reference": true,
+  "admin_doi_rows": 47,
+  "api_key_embedded": false
+}
