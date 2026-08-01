@@ -210,7 +210,7 @@ function renderPagination(totalPages){
     if(b.disabled)return;
     state.page=Number(b.dataset.page);
     renderAll();
-    shell?.scrollIntoView({behavior:'smooth',block:'start'});
+    shell?.scrollIntoView({behavior:'auto',block:'start'});
   });
 }
 function renderDisplayControls(list,info){
@@ -271,8 +271,13 @@ function renderAll(){
   const note=$('#modeNote');
   if(note)note.textContent=state.view==='cv'?I18N.cvNote:I18N.browseNote;
   renderResultCount(list.length,info.start,info.end);
-  renderBrowse(info.items);
-  renderCV(info.items,list);
+  if(state.view==='cv'){
+    renderCV(info.items,list);
+    if(grid)grid.innerHTML='';
+  }else{
+    renderBrowse(info.items);
+    if(cvContent)cvContent.innerHTML='';
+  }
   renderPagination(info.totalPages);
   renderDisplayControls(list,info);
   updateSelectionUi(info.items);
@@ -441,9 +446,23 @@ function fullCvDocumentXml(model){
   availableTypes.filter(type=>groups[type]?.length).forEach(type=>{heading(typeLabels[type]||type);groups[type].forEach(item=>parts.push(wParagraph(`${item.number}. ${currentText(item)}`,{size:18,after:30})))});
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${parts.join('')}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="907" w:right="964" w:bottom="1021" w:left="964" w:header="425" w:footer="425" w:gutter="0"/></w:sectPr></w:body></w:document>`;
 }
+let jsZipLoadPromise=null;
+function ensureJsZip(){
+  if(window.JSZip)return Promise.resolve(window.JSZip);
+  if(jsZipLoadPromise)return jsZipLoadPromise;
+  jsZipLoadPromise=new Promise((resolve,reject)=>{
+    const script=document.createElement('script');
+    script.src='assets/js/jszip.min.js';
+    script.async=true;
+    script.onload=()=>window.JSZip?resolve(window.JSZip):reject(new Error('JSZip unavailable'));
+    script.onerror=()=>reject(new Error('JSZip load failed'));
+    document.head.appendChild(script);
+  });
+  return jsZipLoadPromise;
+}
 async function downloadFullCvDocx(){
-  if(!window.JSZip){toast(LANG==='ja'?'Word出力ライブラリを読み込めませんでした':'The Word export library could not be loaded');return}
-  const model=fullCvModel(),zip=new JSZip();
+  try{await ensureJsZip()}catch(error){toast(LANG==='ja'?'Word出力ライブラリを読み込めませんでした':'The Word export library could not be loaded');return}
+  const model=fullCvModel(),zip=new window.JSZip();
   zip.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>');
   zip.folder('_rels').file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>');
   const word=zip.folder('word');
@@ -563,36 +582,58 @@ $('#copyFullCv')?.addEventListener('click',copyFullCv);
 $('#cvExportDialog')?.addEventListener('click',event=>{if(event.target===event.currentTarget)closeCvDialog()});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&$('#cvExportDialog')?.open)closeCvDialog()});
 
-async function loadPublicationMetrics(){
-  const status=$('#publicationMetricsStatus');
-  let publicData={records:{}};
-  let publicError=null;
-  try{
-    const response=await fetch('assets/data/publication_metrics.json',{cache:'no-store'});
-    if(!response.ok)throw new Error(`HTTP ${response.status}`);
-    publicData=await response.json();
-  }catch(error){publicError=error}
-  let cachedData=null;
-  try{cachedData=JSON.parse(localStorage.getItem('yuyaPublicationMetricsCacheV2')||'null')}catch(error){}
-  publicationMetrics={...(publicData.records||{}),...(cachedData?.records||{})};
-  publicationMetricsMeta=cachedData?.records?{...publicData,...cachedData,records:publicationMetrics}:publicData;
-  const values=Object.values(publicationMetrics);
-  const available=values.filter(m=>hasMetricNumber(m.openalex_citations)||hasMetricNumber(m.wos_citations)||hasMetricNumber(m.openalex_fwci)||hasMetricNumber(m.jif)).length;
-  if(status){
-    const date=publicationMetricsMeta.generated_at?String(publicationMetricsMeta.generated_at).slice(0,10):'';
-    const localNote=cachedData?.records?(LANG==='ja'?'（このブラウザで取得した値を含む）':' (including values fetched in this browser)'):'';
-    if(available){
-      status.textContent=LANG==='ja'
-        ?`論文指標：${available}件にデータあり${date?`（更新 ${date}）`:''}${localNote}。各論文の書誌・DOI直後に表示しています。JIFはJCR値を登録した場合のみ表示します。`
-        :`Publication metrics are available for ${available} papers${date?` (updated ${date})`:''}${localNote} and are displayed immediately after each citation / DOI. JIF appears only when an authorized JCR value has been entered.`;
-    }else{
-      status.textContent=LANG==='ja'
-        ?'論文指標はまだ取得されていません。下の「論文指標の取得・更新」からOpenAlexデータを取得すると、各論文の書誌・DOI直後に表示されます。'
-        :'Publication metrics have not yet been fetched. Use the owner tool below to retrieve OpenAlex data; the values will then appear immediately after each citation / DOI.';
+let publicationMetricsLoadPromise=null;
+let publicationMetricsLoaded=false;
+function loadPublicationMetrics(){
+  if(publicationMetricsLoaded)return Promise.resolve(publicationMetrics);
+  if(publicationMetricsLoadPromise)return publicationMetricsLoadPromise;
+  publicationMetricsLoadPromise=(async()=>{
+    const status=$('#publicationMetricsStatus');
+    let publicData={records:{}};
+    let publicError=null;
+    try{
+      const response=await fetch('assets/data/publication_metrics.json',{cache:'default'});
+      if(!response.ok)throw new Error(`HTTP ${response.status}`);
+      publicData=await response.json();
+    }catch(error){publicError=error}
+    let cachedData=null;
+    try{cachedData=JSON.parse(localStorage.getItem('yuyaPublicationMetricsCacheV2')||'null')}catch(error){}
+    publicationMetrics={...(publicData.records||{}),...(cachedData?.records||{})};
+    publicationMetricsMeta=cachedData?.records?{...publicData,...cachedData,records:publicationMetrics}:publicData;
+    publicationMetricsLoaded=true;
+    const values=Object.values(publicationMetrics);
+    const available=values.filter(m=>hasMetricNumber(m.openalex_citations)||hasMetricNumber(m.wos_citations)||hasMetricNumber(m.openalex_fwci)||hasMetricNumber(m.jif)).length;
+    if(status){
+      const date=publicationMetricsMeta.generated_at?String(publicationMetricsMeta.generated_at).slice(0,10):'';
+      const localNote=cachedData?.records?(LANG==='ja'?'（このブラウザで取得した値を含む）':' (including values fetched in this browser)'):'';
+      if(available){
+        status.textContent=LANG==='ja'
+          ?`論文指標：${available}件にデータあり${date?`（更新 ${date}）`:''}${localNote}。各論文の書誌・DOI直後に表示しています。JIFはJCR値を登録した場合のみ表示します。`
+          :`Publication metrics are available for ${available} papers${date?` (updated ${date})`:''}${localNote} and are displayed immediately after each citation / DOI. JIF appears only when an authorized JCR value has been entered.`;
+      }else{
+        status.textContent=LANG==='ja'
+          ?'論文指標はまだ取得されていません。下の「論文指標の取得・更新」からOpenAlexデータを取得すると、各論文の書誌・DOI直後に表示されます。'
+          :'Publication metrics have not yet been fetched. Use the owner tool below to retrieve OpenAlex data; the values will then appear immediately after each citation / DOI.';
+      }
+      if(publicError&&!cachedData?.records)status.dataset.loadError=String(publicError);
     }
-    if(publicError&& !cachedData?.records)status.dataset.loadError=String(publicError);
+    // Metrics are visible only in the formal/CV view. Avoid a second full render on the landing view.
+    if(state.view==='cv')renderAll();
+    return publicationMetrics;
+  })().finally(()=>{publicationMetricsLoadPromise=null});
+  return publicationMetricsLoadPromise;
+}
+function schedulePublicationMetrics(){
+  const run=()=>{void loadPublicationMetrics()};
+  const section=$('#achievements');
+  if(section&&'IntersectionObserver' in window){
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();run()}
+    },{rootMargin:'800px 0px'});
+    observer.observe(section);
   }
-  renderAll();
+  if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:3500});
+  else setTimeout(run,1200);
 }
 
 /* Mobile navigation. */
@@ -608,6 +649,25 @@ if('IntersectionObserver' in window){
   sections.forEach(s=>observer.observe(s));
 }
 
+function activateStoryMedia(detail){
+  $$('[data-src]',detail).forEach(element=>{
+    const source=element.dataset.src;
+    if(!source)return;
+    if(element.tagName==='IFRAME'){
+      if(!element.getAttribute('src')||element.getAttribute('src')==='about:blank')element.setAttribute('src',source);
+    }else if(element.tagName==='IMG'){
+      const current=element.getAttribute('src')||'';
+      if(element.dataset.srcset&&!element.getAttribute('srcset'))element.setAttribute('srcset',element.dataset.srcset);
+      if(!current||current.startsWith('data:image/gif'))element.setAttribute('src',source);
+    }
+  });
+}
+function deactivateStoryFrames(detail){
+  $$('iframe[data-src]',detail).forEach(frame=>{
+    if(frame.getAttribute('src')&&frame.getAttribute('src')!=='about:blank')frame.setAttribute('src','about:blank');
+  });
+}
+
 /* Research stories stay on the main page and expand in place. */
 const storyDetails=$$('details.story-detail');
 function closeOtherStories(current){storyDetails.forEach(d=>{if(d!==current&&d.open)d.open=false})}
@@ -615,9 +675,11 @@ storyDetails.forEach(detail=>{
   detail.addEventListener('toggle',()=>{
     if(detail.open){
       closeOtherStories(detail);
+      activateStoryMedia(detail);
       if(detail.id)history.replaceState(null,'','#'+detail.id);
-    }else if(location.hash==='#'+detail.id){
-      history.replaceState(null,'','#stories');
+    }else{
+      deactivateStoryFrames(detail);
+      if(location.hash==='#'+detail.id)history.replaceState(null,'','#stories');
     }
   });
 });
@@ -626,7 +688,7 @@ $$('.story-close').forEach(button=>button.addEventListener('click',()=>{
   if(!detail)return;
   detail.open=false;
   detail.querySelector('summary')?.focus();
-  detail.scrollIntoView({behavior:'smooth',block:'center'});
+  detail.scrollIntoView({behavior:'auto',block:'center'});
 }));
 function openStoryFromHash(){
   if(!location.hash)return;
@@ -635,10 +697,20 @@ function openStoryFromHash(){
   if(target?.matches('details.story-detail')){
     closeOtherStories(target);
     target.open=true;
-    setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),60);
+    activateStoryMedia(target);
+    setTimeout(()=>target.scrollIntoView({behavior:'auto',block:'start'}),60);
   }
 }
 window.addEventListener('hashchange',openStoryFromHash);
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)storyDetails.forEach(deactivateStoryFrames);
+  else storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
+});
+window.addEventListener('pageshow',()=>{
+  document.documentElement.classList.remove('page-restoring');
+  storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
+});
+
 
 let lastViewportKey=viewportKey();
 window.addEventListener('resize',()=>{
@@ -648,7 +720,7 @@ window.addEventListener('resize',()=>{
 
 renderRoles();
 renderAll();
-loadPublicationMetrics();
+schedulePublicationMetrics();
 initNewsList();
 openStoryFromHash();
 })();

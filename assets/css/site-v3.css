@@ -1034,3 +1034,45 @@ h1 span{font-size:14px;letter-spacing:.18em;color:#75869a}
 .card-related-links a{color:var(--blue);font-weight:800;text-decoration:underline;text-underline-offset:2px}
 .cv-related-links{display:block;margin-top:4px;color:var(--muted);font-size:12px;line-height:1.6}
 .cv-related-links a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+
+/* ======================================================================
+   v3.7.3 performance patch
+   - avoid full-page compositing and fixed backdrop blur
+   - render offscreen sections only when needed
+   - make internal navigation respond immediately
+   ====================================================================== */
+html{scroll-behavior:auto}
+.main{overflow-x:clip;overflow-y:visible}
+.topbar{
+  background:#fff;
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+.hero-visual img{filter:none}
+a,button{touch-action:manipulation}
+
+@supports (content-visibility:auto){
+  .main>.section{
+    content-visibility:auto;
+    contain-intrinsic-size:auto 980px;
+  }
+  #achievements{contain-intrinsic-size:auto 1700px}
+  #stories{contain-intrinsic-size:auto 1200px}
+}
+
+.deferred-story-media{
+  background:#f1f5f8;
+  transition:opacity .16s ease;
+}
+.deferred-story-media[src^="data:image/gif"]{opacity:0}
+.deferred-story-frame[src="about:blank"]{
+  min-height:0!important;
+  height:0!important;
+  margin:0!important;
+  border:0!important;
+  overflow:hidden;
+}
+
+@media print{
+  .main>.section{content-visibility:visible!important;contain-intrinsic-size:none!important}
+}

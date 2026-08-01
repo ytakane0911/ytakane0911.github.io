@@ -1,0 +1,136 @@
+{
+  "version": "3.7.3",
+  "files": {
+    "index.html": {
+      "counts": {
+        "news": 17,
+        "themes": 4,
+        "projects": 7,
+        "featured": 5,
+        "stories": 9,
+        "achievements": 170
+      },
+      "baseline_counts": {
+        "news": 17,
+        "themes": 4,
+        "projects": 7,
+        "featured": 5,
+        "stories": 9,
+        "achievements": 170
+      },
+      "counts_equal": true,
+      "achievement_records_equal": true,
+      "duplicate_ids": [],
+      "missing_local_refs": [],
+      "images_missing_dimensions": [],
+      "responsive_images": 20,
+      "deferred_responsive_images": 3,
+      "eager_jszip_scripts": 0,
+      "deferred_story_images": 3,
+      "deferred_story_iframes": 2
+    },
+    "index_en.html": {
+      "counts": {
+        "news": 3,
+        "themes": 4,
+        "projects": 3,
+        "featured": 5,
+        "stories": 3,
+        "achievements": 109
+      },
+      "baseline_counts": {
+        "news": 3,
+        "themes": 4,
+        "projects": 3,
+        "featured": 5,
+        "stories": 3,
+        "achievements": 109
+      },
+      "counts_equal": true,
+      "achievement_records_equal": true,
+      "duplicate_ids": [],
+      "missing_local_refs": [],
+      "images_missing_dimensions": [],
+      "responsive_images": 14,
+      "deferred_responsive_images": 2,
+      "eager_jszip_scripts": 0,
+      "deferred_story_images": 2,
+      "deferred_story_iframes": 0
+    }
+  },
+  "direct_image_choices": {
+    "index.html": {
+      "before": {
+        "direct_fallback_all": {
+          "files": 16,
+          "network_bytes": 50036962,
+          "decoded_pixel_bytes": 486237044
+        },
+        "direct_fallback_eager": {
+          "files": 5,
+          "network_bytes": 10031027,
+          "decoded_pixel_bytes": 162398140
+        }
+      },
+      "after": {
+        "direct_fallback_all": {
+          "files": 16,
+          "network_bytes": 873600,
+          "decoded_pixel_bytes": 17317524
+        },
+        "direct_fallback_eager": {
+          "files": 2,
+          "network_bytes": 89302,
+          "decoded_pixel_bytes": 2337976
+        }
+      }
+    },
+    "index_en.html": {
+      "before": {
+        "direct_fallback_all": {
+          "files": 9,
+          "network_bytes": 28797658,
+          "decoded_pixel_bytes": 323394808
+        },
+        "direct_fallback_eager": {
+          "files": 2,
+          "network_bytes": 15300911,
+          "decoded_pixel_bytes": 183266304
+        }
+      },
+      "after": {
+        "direct_fallback_all": {
+          "files": 8,
+          "network_bytes": 376932,
+          "decoded_pixel_bytes": 10225408
+        },
+        "direct_fallback_eager": {
+          "files": 2,
+          "network_bytes": 125262,
+          "decoded_pixel_bytes": 2678400
+        }
+      }
+    }
+  },
+  "javascript": {
+    "syntax_checked_separately": true,
+    "lazy_jszip": true,
+    "metrics_cache_default": true,
+    "metrics_no_store_absent": true,
+    "metrics_deferred": true,
+    "active_view_only": true,
+    "deferred_story_media": true,
+    "responsive_deferred_media": true,
+    "smooth_scroll_absent": true
+  },
+  "css": {
+    "scroll_auto": true,
+    "fixed_backdrop_blur_overridden": true,
+    "content_visibility": true,
+    "vertical_main_clipping_removed": true
+  },
+  "patch_safety": {
+    "publication_metrics_json_in_patch": false,
+    "openalex_workflow_in_patch": false
+  }
+}
