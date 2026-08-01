@@ -1,6 +1,10 @@
 (() => {
 'use strict';
 
+const SITE_BUILD='3.7.4-performance-font';
+document.documentElement.dataset.siteBuild=SITE_BUILD;
+
+
 const LANG=document.documentElement.lang==='en'?'en':'ja';
 const I18N=window.SITE_I18N||{};
 const typeLabels=I18N.typeLabels||{};
@@ -703,11 +707,14 @@ function openStoryFromHash(){
 }
 window.addEventListener('hashchange',openStoryFromHash);
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden)storyDetails.forEach(deactivateStoryFrames);
-  else storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
+  if(document.hidden){
+    storyDetails.forEach(deactivateStoryFrames);
+    return;
+  }
+  // Do not hide or rebuild the page on tab return. Only restore media in an open story.
+  storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
 });
 window.addEventListener('pageshow',()=>{
-  document.documentElement.classList.remove('page-restoring');
   storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
 });
 
