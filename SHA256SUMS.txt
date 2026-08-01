@@ -1,7 +1,8 @@
-0f1e405979b7a7d34b90b62ad462e4404e0825c7ee46cf25ac6d4a2bfff38212  ./APPLY_PERFORMANCE_PATCH.md
-cecd335cf8e94937c76639388ea83984172eb475c6e60a439e46e80412a268e5  ./PERFORMANCE_AUDIT_v3_7_3.md
-ae16ebf92312e9d29e5a0b92adb76b52a5e54f26b3e9ded98cfe8a8553e707a3  ./QA_PERFORMANCE_v3_7_3.json
-92780e448dce3b18e4d38064431ea3d1269e99ee06563ceafc977f24ed071958  ./assets/css/site-v3.css
+578919f84f22c581e7235aa0015070be41285288a0084ee59b7dc773a9f04fc2  ./APPLY_v3_7_4.md
+960fbb5f084ee3af7e4ad1b3c804e5cf04fe196f1d38ff83031e492546b7f327  ./PERFORMANCE_FONT_AUDIT_v3_7_4.md
+b68cf7d4313e9b55f943fb1bd4c5d90b6afc08266854b8767804a469e996c9c4  ./QA_v3_7_4.json
+1037b411e7f0f1daf4b78d9c700591c1de4205616c33df21d4091df8f4e37e9a  ./VERIFY_v3_7_4.sh
+e95ded4328239af491383b376ff3644e6e261f0dda071deef7d4d97370fcf483  ./assets/css/site-v3.css
 781fb45ecc6ff0dec2e0c4de1ca7d2fdae09e009519e8ab07e0dced746319b37  ./assets/images/optimized/adaptation-1000.webp
 eead3fa3a93ddca45ca4cc794a8804c5f58f20b274f73857a2ce770d61756490  ./assets/images/optimized/adaptation-700.webp
 6f440e0521215a6a996b2cf743c874cc8cefcf0cb3a935fde0631a180acb5638  ./assets/images/optimized/covid-1400.webp
@@ -28,6 +29,7 @@ d404eab63812e1af3a3372ffcc84579307391a47b343ed95732f6643ae41f3b7  ./assets/image
 c6166b60a728b92184deddb546555afdb6318b809cc7d46d904d3c01798380eb  ./assets/images/optimized/skytree-900.webp
 d9534d76aa708a41ca5d86b71120d6f7686b26cf1543264be69d6a1bce0cbf76  ./assets/images/optimized/slucm-bem-1400.webp
 6e02a484ce82102e91a277a5de15450a2e56470747f6ca7408a5076f945ce00e  ./assets/images/optimized/slucm-bem-700.webp
-c0d4b5eb559ace224a289986089805900eeb0740304191813c778a3b0934e426  ./assets/js/site-v3.js
-f45f9326e313c8cfa5e4a36b7f8af1660a4b112549de00936d71d8c69c89786a  ./index.html
-52b06f1d90562d9afea10f7c284f91f2c72336e8c99b44379baa8cdae57f4b7e  ./index_en.html
+3ed3a9be58bfdfd234ae492c5619fac7e5d501958ca13df5406d7aa7106d805f  ./assets/js/site-v3.js
+37fc78a842693b143265b0aad0af8c48f08933765bd35a4846ee00e59f7a76f5  ./index.html
+5205fb80b4b72baf4383780d39863e3f7ea0ca675c7a1b629452bb4f992eb0ad  ./index_en.html
+dfe7d6e54c9c9bb249afd3d2ede5c47be1496e4ef43006a61f230b0c83c6ab7a  ./site-version.json

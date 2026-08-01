@@ -1036,67 +1036,26 @@ h1 span{font-size:14px;letter-spacing:.18em;color:#75869a}
 .cv-related-links a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
 
 /* ======================================================================
-   v3.7.4 verified performance + typography patch
-   - current-page images are served as responsive WebP
-   - fixed filtered layers and full-page clipping are removed
-   - local font stacks avoid web-font downloads and font-loading flashes
+   v3.7.3 performance patch
+   - avoid full-page compositing and fixed backdrop blur
+   - render offscreen sections only when needed
+   - make internal navigation respond immediately
    ====================================================================== */
-:root{
-  --font-ja:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Noto Sans JP",Meiryo,sans-serif;
-  --font-en:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --font-latin:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-}
-html{scroll-behavior:auto!important}
-html[lang="ja"] body{
-  font-family:var(--font-ja);
-  font-kerning:normal;
-  font-feature-settings:"palt" 1,"kern" 1;
-  text-rendering:optimizeLegibility;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-html[lang="en"] body{
-  font-family:var(--font-en);
-  font-kerning:normal;
-  font-feature-settings:"kern" 1,"liga" 1;
-  text-rendering:optimizeLegibility;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-button,input,select,textarea{font-family:inherit}
-.section-kicker,.overline,.brand strong,.topbar-brand span,.theme-index,.featured .year,
-.card-year,.type-badge,.visual-tags,.profile-links-label,.language-switch{
-  font-family:var(--font-latin);
-}
-html[lang="ja"] h1,html[lang="ja"] h2,html[lang="ja"] h3,
-html[lang="ja"] .side-nav a,html[lang="ja"] .btn{
-  font-family:var(--font-ja);
-  font-feature-settings:"palt" 1,"kern" 1;
-}
-html[lang="en"] h1,html[lang="en"] h2,html[lang="en"] h3,
-html[lang="en"] .side-nav a,html[lang="en"] .btn{font-family:var(--font-en)}
-h1,h2,h3{font-weight:700}
-.side-nav a,.btn,.profile-links-list a,.profile-actions .btn{font-weight:700}
-.side-nav a{justify-content:flex-start}
-.side-nav small{display:none!important}
-
-/* Avoid costly filtered/composited layers on fixed or large elements. */
+html{scroll-behavior:auto}
+.main{overflow-x:clip;overflow-y:visible}
 .topbar{
-  background:#fff!important;
-  -webkit-backdrop-filter:none!important;
-  backdrop-filter:none!important;
+  background:#fff;
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
 }
-.visual-tags span{
-  background:rgba(8,38,67,.56)!important;
-  -webkit-backdrop-filter:none!important;
-  backdrop-filter:none!important;
-}
-.hero-visual img{filter:none!important}
-.main{overflow-x:clip!important;overflow-y:visible!important}
+.hero-visual img{filter:none}
 a,button{touch-action:manipulation}
 
-/* Story media is loaded only after its article is opened. */
-.deferred-story-media{background:#f1f5f8;transition:opacity .16s ease}
+
+.deferred-story-media{
+  background:#f1f5f8;
+  transition:opacity .16s ease;
+}
 .deferred-story-media[src^="data:image/gif"]{opacity:0}
 .deferred-story-frame[src="about:blank"]{
   min-height:0!important;
@@ -1104,4 +1063,48 @@ a,button{touch-action:manipulation}
   margin:0!important;
   border:0!important;
   overflow:hidden;
+}
+
+
+
+/* ======================================================================
+   v3.7.4 verified performance + typography patch
+   - system-font stacks only: no external font download
+   - no content-visibility blanking on restored/background tabs
+   - stable first paint and immediate link feedback
+   ====================================================================== */
+:root{
+  --font-ja:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-en:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI Variable","Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+html,body{min-height:100%;background:#fff}
+html[lang="ja"] body,
+html[lang="ja"] button,
+html[lang="ja"] input,
+html[lang="ja"] select,
+html[lang="ja"] textarea{font-family:var(--font-ja)}
+html[lang="en"] body,
+html[lang="en"] button,
+html[lang="en"] input,
+html[lang="en"] select,
+html[lang="en"] textarea{font-family:var(--font-en)}
+body{
+  font-synthesis:none;
+  font-kerning:normal;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+html[lang="ja"] :where(h1,h2,h3,.brand,.topbar-brand,.section-kicker,.overline,.visual-caption strong){
+  font-feature-settings:"palt" 1,"kern" 1;
+}
+html[lang="en"] :where(h1,h2,h3,.brand,.topbar-brand,.section-kicker,.overline,.visual-caption strong){
+  font-feature-settings:"kern" 1,"liga" 1;
+}
+.main>.section{content-visibility:visible;contain:none}
+a,button,[role="button"]{-webkit-tap-highlight-color:rgba(35,105,180,.12)}
+a:active,button:active{transition-duration:0s}
+.site-version-marker{display:none!important}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }

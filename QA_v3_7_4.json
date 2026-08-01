@@ -1,0 +1,52 @@
+{
+  "version": "3.7.4",
+  "generated_at": "2026-08-01",
+  "checks": {
+    "index.html": {
+      "build_marker": true,
+      "build_meta": true,
+      "versioned_css": true,
+      "versioned_js": true,
+      "no_eager_jszip": true,
+      "no_eager_gtag": true,
+      "optimized_profile": true,
+      "optimized_hero": true,
+      "duplicate_ids": []
+    },
+    "index_en.html": {
+      "build_marker": true,
+      "build_meta": true,
+      "versioned_css": true,
+      "versioned_js": true,
+      "no_eager_jszip": true,
+      "no_eager_gtag": true,
+      "optimized_profile": true,
+      "optimized_hero": true,
+      "duplicate_ids": []
+    },
+    "css": {
+      "japanese_system_stack": true,
+      "english_system_stack": true,
+      "no_external_font_url": true,
+      "no_content_visibility_auto": true,
+      "no_fixed_header_blur": true
+    },
+    "js": {
+      "syntax_ok": true,
+      "lazy_achievement_render": true,
+      "active_mode_only": true,
+      "delayed_metrics": true,
+      "no_metrics_no_store": true,
+      "lazy_jszip": true,
+      "delayed_analytics": true,
+      "tab_diagnostics": true,
+      "no_hidden_tab_frame_teardown": true
+    }
+  },
+  "summary": {
+    "optimized_images": 26,
+    "optimized_images_bytes": 2678930,
+    "patch_files": 35,
+    "all_checks_pass": true
+  }
+}

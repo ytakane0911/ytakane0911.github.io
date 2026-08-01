@@ -1,10 +1,6 @@
 (() => {
 'use strict';
 
-const SITE_BUILD='3.7.4-performance-font';
-document.documentElement.dataset.siteBuild=SITE_BUILD;
-
-
 const LANG=document.documentElement.lang==='en'?'en':'ja';
 const I18N=window.SITE_I18N||{};
 const typeLabels=I18N.typeLabels||{};
@@ -12,6 +8,19 @@ const typeOrder=['paper','grant','award','book','review','press','outreach','int
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const normalize=s=>String(s||'').replace(/\s+/g,' ').trim();
+const SITE_BUILD=window.SITE_BUILD||document.documentElement.dataset.siteBuild||'3.7.4';
+function updateSiteDiagnostics(pageShowEvent=null){
+  const nav=performance.getEntriesByType?.('navigation')?.[0];
+  window.YUYA_SITE_DIAGNOSTICS={
+    build:SITE_BUILD,
+    wasDiscarded:document.wasDiscarded===true,
+    restoredFromBfcache:pageShowEvent?.persisted===true,
+    navigationType:nav?.type||'unknown',
+    visibilityState:document.visibilityState,
+    timestamp:new Date().toISOString()
+  };
+}
+updateSiteDiagnostics();
 
 function copyReadyText(node){
   if(!node)return'';
@@ -76,6 +85,7 @@ const cvContent=$('#cvContent');
 const resultCount=$('#resultCount');
 const pagination=$('#achievementPagination');
 const displayControls=$('#achievementDisplayControls');
+let achievementUiInitialized=false;
 
 function escapeHtml(s){
   return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -266,7 +276,7 @@ function updateSelectionUi(pageItems=pageInfo(filtered()).items){
 }
 
 function renderAll(){
-  if(!shell)return;
+  if(!shell||!achievementUiInitialized)return;
   renderCategories();
   const list=filtered();
   const info=pageInfo(list);
@@ -285,6 +295,34 @@ function renderAll(){
   renderPagination(info.totalPages);
   renderDisplayControls(list,info);
   updateSelectionUi(info.items);
+}
+
+function initializeAchievementUi(){
+  if(achievementUiInitialized||!shell)return;
+  achievementUiInitialized=true;
+  renderRoles();
+  renderAll();
+  schedulePublicationMetrics();
+}
+function scheduleAchievementUi(){
+  const run=()=>initializeAchievementUi();
+  const section=$('#achievements');
+  if(location.hash==='#achievements')run();
+  if(section&&'IntersectionObserver' in window&&!achievementUiInitialized){
+    const observer=new IntersectionObserver(entries=>{
+      if(entries.some(entry=>entry.isIntersecting)){
+        observer.disconnect();
+        run();
+      }
+    },{rootMargin:'1200px 0px'});
+    observer.observe(section);
+  }
+  $$('a[href="#achievements"],#openCvExport,[data-view],#browseToCv').forEach(element=>{
+    element.addEventListener('pointerdown',run,{once:true,passive:true});
+    element.addEventListener('focus',run,{once:true});
+  });
+  if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:1800});
+  else setTimeout(run,450);
 }
 
 function buildPayload(list,groupHeadings){
@@ -465,6 +503,7 @@ function ensureJsZip(){
   return jsZipLoadPromise;
 }
 async function downloadFullCvDocx(){
+  initializeAchievementUi();
   try{await ensureJsZip()}catch(error){toast(LANG==='ja'?'Word出力ライブラリを読み込めませんでした':'The Word export library could not be loaded');return}
   const model=fullCvModel(),zip=new window.JSZip();
   zip.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>');
@@ -481,16 +520,18 @@ async function downloadFullCvDocx(){
   toast(LANG==='ja'?'フルCV（Word）を保存しました':'Full Word CV saved');
 }
 function openFullCvPrint(){
+  initializeAchievementUi();
   const popup=window.open('','_blank');
   if(!popup){toast(LANG==='ja'?'印刷画面を開けませんでした':'The print view could not be opened');return}
   popup.document.open();popup.document.write(fullCvHtml(fullCvModel(),{printView:true}));popup.document.close();
 }
 async function copyFullCv(){
+  initializeAchievementUi();
   const model=fullCvModel(),html=fullCvHtml(model).replace(/<!doctype[\s\S]*?<body>/i,'').replace(/<\/body>[\s\S]*$/i,'');
   const ok=await writeClipboard(fullCvPlain(model),html);
   toast(ok?(LANG==='ja'?'フルCVをコピーしました':'Full CV copied'):I18N.copyFailed);
 }
-function openCvDialog(){const dialog=$('#cvExportDialog');if(!dialog)return;const full=$('#fullCvIncludeMetrics'),list=$('#includeMetrics');if(full&&list)full.checked=list.checked;if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','')}
+function openCvDialog(){initializeAchievementUi();const dialog=$('#cvExportDialog');if(!dialog)return;const full=$('#fullCvIncludeMetrics'),list=$('#includeMetrics');if(full&&list)full.checked=list.checked;if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','')}
 function closeCvDialog(){const dialog=$('#cvExportDialog');if(!dialog)return;if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open')}
 
 async function copyItems(list,heads=true){
@@ -510,6 +551,7 @@ function syncSelectAll(list){
   box.indeterminate=ids.some(id=>state.selected.has(id))&&!box.checked;
 }
 function setView(v){
+  initializeAchievementUi();
   state.view=v;
   resetDisplay();
   if(v!=='cv'){
@@ -640,6 +682,31 @@ function schedulePublicationMetrics(){
   else setTimeout(run,1200);
 }
 
+function scheduleAnalytics(){
+  const id=window.SITE_GA_ID;
+  if(!id||/^(localhost|127\.0\.0\.1)$/.test(location.hostname))return;
+  let loaded=false;
+  const load=()=>{
+    if(loaded||document.getElementById('site-gtag'))return;
+    loaded=true;
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};
+    window.gtag('js',new Date());
+    window.gtag('config',id);
+    const script=document.createElement('script');
+    script.id='site-gtag';
+    script.async=true;
+    script.src=`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+    document.head.appendChild(script);
+  };
+  const afterLoad=()=>{
+    if('requestIdleCallback' in window)requestIdleCallback(load,{timeout:4500});
+    else setTimeout(load,1800);
+  };
+  if(document.readyState==='complete')afterLoad();
+  else window.addEventListener('load',afterLoad,{once:true});
+}
+
 /* Mobile navigation. */
 function closeNav(){document.body.classList.remove('nav-open');$('#menuBtn')?.setAttribute('aria-expanded','false')}
 $('#menuBtn')?.addEventListener('click',()=>{const open=document.body.classList.toggle('nav-open');$('#menuBtn').setAttribute('aria-expanded',String(open))});
@@ -707,14 +774,14 @@ function openStoryFromHash(){
 }
 window.addEventListener('hashchange',openStoryFromHash);
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){
-    storyDetails.forEach(deactivateStoryFrames);
-    return;
+  if(!document.hidden){
+    updateSiteDiagnostics();
+    requestAnimationFrame(()=>document.documentElement.classList.add('tab-visible'));
   }
-  // Do not hide or rebuild the page on tab return. Only restore media in an open story.
-  storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
 });
-window.addEventListener('pageshow',()=>{
+window.addEventListener('pageshow',event=>{
+  updateSiteDiagnostics(event);
+  document.documentElement.classList.remove('page-restoring');
   storyDetails.filter(detail=>detail.open).forEach(activateStoryMedia);
 });
 
@@ -722,12 +789,12 @@ window.addEventListener('pageshow',()=>{
 let lastViewportKey=viewportKey();
 window.addEventListener('resize',()=>{
   const key=viewportKey();
-  if(key!==lastViewportKey){lastViewportKey=key;resetDisplay();renderAll()}
+  if(key!==lastViewportKey){lastViewportKey=key;if(achievementUiInitialized){resetDisplay();renderAll()}}
 });
 
-renderRoles();
-renderAll();
-schedulePublicationMetrics();
 initNewsList();
 openStoryFromHash();
+scheduleAchievementUi();
+scheduleAnalytics();
+console.info(`[Yuya.Takane.Log] build ${SITE_BUILD}`,window.YUYA_SITE_DIAGNOSTICS);
 })();
