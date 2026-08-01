@@ -1,6 +1,6 @@
 {
-  "version": "3.7.4",
-  "name": "verified-performance-font",
+  "version": "3.7.5",
+  "name": "verified-performance-font-menu-cleanup",
   "date": "2026-08-01",
   "verification": "document.documentElement.dataset.siteBuild"
 }
