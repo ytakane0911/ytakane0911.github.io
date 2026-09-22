@@ -78,7 +78,7 @@ function viewportKey(){
   return'desktop';
 }
 function basePageSize(){return PAGE_SIZE[state.view][viewportKey()]}
-let state={view:'browse',type:'all',query:'',role:'all',period:'all',format:'cv',selected:new Set(),page:1,pageSizeSteps:1,showAll:false,selectionMode:false};
+let state={view:'cv',type:(availableTypes.includes('paper')?'paper':availableTypes[0]),query:'',role:'all',period:'all',format:'cv',selected:new Set(),page:1,pageSizeSteps:1,showAll:true,selectionMode:false};
 const shell=$('#achievementShell');
 const grid=$('#browseGrid');
 const cvContent=$('#cvContent');
@@ -129,7 +129,7 @@ function sortAchievements(list){
 function filtered(){
   const q=state.query.trim().toLowerCase();
   return sortAchievements(achievements.filter(i=>{
-    if(state.type!=='all'&&i.type!==state.type)return false;
+    if(i.type!==state.type)return false;
     if(state.role!=='all'&&i.role!==state.role)return false;
     if(state.period==='2025plus'&&i.year<2025)return false;
     if(state.period==='2020to2024'&&(i.year<2020||i.year>2024))return false;
@@ -148,13 +148,13 @@ function pageInfo(list){
   return {base,size,totalPages,start,end,items:list.slice(start,end)};
 }
 function resetPage(){state.page=1}
-function resetDisplay(){state.page=1;state.pageSizeSteps=1;state.showAll=false}
+function resetDisplay(){state.page=1;state.pageSizeSteps=1;state.showAll=true}
 
 function renderCategories(){
   const strip=$('#categoryStrip');
   if(!strip)return;
   const counts=achievements.reduce((o,i)=>(o[i.type]=(o[i.type]||0)+1,o),{});
-  strip.innerHTML=['all',...availableTypes].map(t=>`<button class="${state.type===t?'active':''}" data-type="${t}">${t==='all'?I18N.all:typeLabels[t]} ${t==='all'?achievements.length:(counts[t]||0)}</button>`).join('');
+  strip.innerHTML=availableTypes.map(t=>`<button class="${state.type===t?'active':''}" data-type="${t}">${typeLabels[t]} ${counts[t]||0}</button>`).join('');
   $$('button',strip).forEach(b=>b.onclick=()=>{
     state.type=b.dataset.type;
     resetPage();
@@ -277,6 +277,8 @@ function updateSelectionUi(pageItems=pageInfo(filtered()).items){
 
 function renderAll(){
   if(!shell||!achievementUiInitialized)return;
+  state.view='cv';state.showAll=true;state.page=1; // HP04_NOTO_20260922
+  if(!availableTypes.includes(state.type))state.type=(availableTypes.includes('paper')?'paper':availableTypes[0]);
   renderCategories();
   const list=filtered();
   const info=pageInfo(list);
@@ -295,6 +297,7 @@ function renderAll(){
   renderPagination(info.totalPages);
   renderDisplayControls(list,info);
   updateSelectionUi(info.items);
+  window.HP04?.afterRender(list.length,info.items.length,state.type);
 }
 
 function initializeAchievementUi(){
@@ -552,7 +555,7 @@ function syncSelectAll(list){
 }
 function setView(v){
   initializeAchievementUi();
-  state.view=v;
+  v='cv';state.view='cv';
   resetDisplay();
   if(v!=='cv'){
     state.selectionMode=false;
@@ -794,7 +797,7 @@ window.addEventListener('resize',()=>{
 
 initNewsList();
 openStoryFromHash();
-scheduleAchievementUi();
+initializeAchievementUi();
 scheduleAnalytics();
 console.info(`[Yuya.Takane.Log] build ${SITE_BUILD}`,window.YUYA_SITE_DIAGNOSTICS);
 })();

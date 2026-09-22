@@ -1,0 +1,121 @@
+/* HP04_NOTO_20260922 — production overlay; keep site-v3.css unchanged.
+   Japanese: Noto Sans JP (Google Fonts); Latin: Segoe UI when installed.
+   No font binaries are bundled. Latin fallbacks precede Noto Sans JP so that
+   Latin text does not switch to Noto on devices without Segoe UI.
+   Body content, original layout grids and images are unchanged. */
+html[data-hp-design="calm"] {
+  --font-ja:"Segoe UI","Helvetica Neue",Arial,"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  --font-en:"Segoe UI","Helvetica Neue",Arial,"Noto Sans JP","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+}
+html[data-hp-design="calm"] body,
+html[data-hp-design="calm"] :is(button,input,select,textarea) {
+  font-family:var(--font-ja)!important;
+}
+html[data-hp-design="calm"] :is(h1,h2,h3,h4,h5,h6,.story-title,.brand strong,.topbar-brand strong),
+html[data-hp-design="calm"] :is(h1,h2,h3,h4,h5,h6,.story-title,.brand strong,.topbar-brand strong) :is(span,b,strong,em,a) {
+  font-family:var(--font-ja)!important;
+}
+
+/* Category-specific list: show the selected category, never a combined All view. */
+#achievements .view-row,
+#achievements #browseGrid,
+#achievements .browse-cta,
+#achievements #achievementPagination,
+#achievements #achievementDisplayControls {display:none!important}
+#achievements .filters {grid-template-columns:minmax(220px,1fr) 180px 180px;margin-top:0}
+#achievements .cv-panel {display:block;padding-top:27px}
+#achievements .cv-list {display:block;list-style:none;margin:0;padding:0}
+#achievements .cv-list>li {
+  display:list-item;min-height:0;padding:0 0 19px;margin:0;
+  border:0;border-radius:0;box-shadow:none;background:transparent;
+  font-size:16px;line-height:1.82;
+}
+#achievements .cv-record {min-width:0;overflow-wrap:anywhere}
+#achievements .cv-group h3 {font-size:20px}
+#achievements .cv-record a {text-underline-offset:3px}
+#achievements .cv-copy {font-weight:500;font-size:12px}
+#achievements .hp-list-tools {width:100%;font-size:13px;color:var(--text)}
+#achievements .hp-list-tools>summary {
+  cursor:pointer;display:list-item;min-height:38px;line-height:38px;color:var(--blue);
+  font-weight:600;list-style-position:inside;outline-offset:3px;
+}
+#achievements .ach-toolbar {flex-wrap:wrap;align-items:flex-start}
+#achievements .ach-toolbar .result-count {padding-top:7px}
+#achievements .hp-list-tools {flex:1 1 250px}
+#achievements .hp-list-tools>summary {text-align:right}
+#achievements .hp-list-tools[open] {flex-basis:100%}
+#achievements .hp-list-tools[open]>summary {text-align:left}
+#achievements .hp-list-tools-body {padding:12px 0 5px;display:grid;gap:15px}
+#achievements .hp-list-tools .toolbar-actions {display:flex;flex-wrap:wrap;gap:8px}
+#achievements .hp-list-tools .cv-help {display:flex;margin:0;font-size:13px}
+#achievements .hp-list-tools .cv-only-field {display:block;max-width:320px}
+#achievements .hp-list-tools .publication-metrics-status,
+#achievements .hp-list-tools .publication-metrics-owner-tools {margin:0}
+#achievements .hp-list-tools .cv-options {align-items:flex-start}
+#achievements [hidden] {display:none!important}
+#achievements :is(input,select,button,summary):focus-visible {outline:2px solid var(--blue);outline-offset:3px}
+@media(max-width:1180px) {
+ #achievements .filters {grid-template-columns:minmax(160px,1fr) 150px 150px}
+}
+@media(max-width:860px) {
+ #achievements .filters {grid-template-columns:1fr 1fr}
+ #achievements .filters>.field:first-child {grid-column:1/-1}
+ #achievements .hp-list-tools {flex-basis:100%}
+ #achievements .hp-list-tools>summary {text-align:left}
+}
+@media(max-width:640px) {
+ #achievements .filters {grid-template-columns:1fr}
+ #achievements .filters>.field:first-child {grid-column:auto}
+ #achievements .cv-panel {padding:22px 16px 30px}
+ #achievements .cv-item {grid-template-columns:30px minmax(0,1fr);gap:8px}
+ #achievements .cv-item.selection-enabled {grid-template-columns:62px 30px minmax(0,1fr)}
+ #achievements .cv-copy {grid-column:2;margin:3px 0 0;text-align:left;justify-self:start}
+ #achievements .cv-item.selection-enabled .cv-copy {grid-column:3}
+ #achievements .cv-select {padding:0 4px;font-size:10px}
+ #achievements .cv-list>li {font-size:15px;line-height:1.85}
+ #achievements .hp-list-tools .cv-help {flex-direction:column}
+}
+@media print {
+ #achievements .hp-list-tools {display:none!important}
+ #achievements .cv-list>li {font-size:10pt}
+}
+
+/* 04 CALM: muted blue-grey palette and restrained typography, modest card outlines. */
+html[data-hp-design="calm"] {
+ --navy:#273f52;--navy2:#375366;--blue:#416986;--blue-soft:#edf2f5;
+ --teal:#416986;--teal-soft:#eef3f5;--orange:#61788b;--purple:#61788b;
+ --ink:#273c4c;--text:#465b6b;--muted:#687b89;--line:#d8e1e7;--surface:#f4f6f7;
+}
+html[data-hp-design="calm"] :is(.theme-card,.featured,.story-detail,.achievements-shell,.contact-map,.affiliation-mark),
+html[data-hp-design="calm"] #profile :is(.hero-grid,.profile-hero-grid,.portrait) {border-radius:8px!important;box-shadow:none!important}
+html[data-hp-design="calm"] #profile.hero {background:#f4f6f7}
+html[data-hp-design="calm"] .hero:before {display:none}
+html[data-hp-design="calm"] :is(.btn,.mini-btn,.story-close,.side-nav a,.language-switch,.language-switch a,.field input,.field select,.category-strip button,.hero-focus span,.news-row .label,.pill,.contact-links a,.visual-tags span) {border-radius:5px!important;box-shadow:none!important;font-weight:500!important}
+html[data-hp-design="calm"] :is(h1,h2,h3,.story-title,.brand strong,.topbar-brand strong) {font-weight:600!important}
+html[data-hp-design="calm"] :is(.section-kicker,.overline,.theme-index,.featured .year,.profile-links-label,.story-date) {font-weight:500!important;letter-spacing:.08em}
+html[data-hp-design="calm"] :is(.profile-title-block .role,.profile-links-list a,.project-program,.hero-highlights b,.news-row time,.timeline-row time) {font-weight:600!important}
+html[data-hp-design="calm"] .theme-card:nth-child(n):before {background:#9aadb9}
+html[data-hp-design="calm"] #profile .hero-focus span {background:#f5f7f8;border-color:#e0e6ea;color:#506777}
+html[data-hp-design="calm"] .story.primary {background:var(--navy)}
+html[data-hp-design="calm"] .story.primary :is(.story-date,.story-excerpt) {color:#d9e3e9}
+html[data-hp-design="calm"] .contact-box {border-radius:8px;background:var(--navy)}
+html[data-hp-design="calm"] #achievements .cv-group h3 {font-weight:600;border-bottom:1px solid #97aab8}
+html[data-hp-design="calm"] #achievements .cv-number {font-weight:500;color:#647d8f}
+html[data-hp-design="calm"] :is(.theme-card,.featured,.story-detail,.btn):hover {transform:none;box-shadow:none}
+
+/* Requested correction: remove the short decorative underline on LinkedIn only.
+   No URL, label, surrounding profile link or layout is changed. */
+#profile a[href*="linkedin.com"]::after {
+  content:none!important;
+  display:none!important;
+}
+#profile a[href*="linkedin.com"],
+#profile a[href*="linkedin.com"]:hover,
+#profile a[href*="linkedin.com"]:focus-visible,
+#profile a[href*="linkedin.com"] * {
+  text-decoration:none!important;
+}
+#profile a[href*="linkedin.com"]:focus-visible {
+  outline:2px solid var(--blue);
+  outline-offset:4px;
+}

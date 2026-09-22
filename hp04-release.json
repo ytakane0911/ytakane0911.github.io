@@ -1,0 +1,56 @@
+{
+  "release": "HP04_NOTO_20260922",
+  "installed_utc": "2026-09-22T01:56:58Z",
+  "design": "04 calm",
+  "japanese_font": "Noto Sans JP",
+  "latin_preferred_font": "Segoe UI",
+  "web_font_css": "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap",
+  "original_git_commit": "dbc4a9dd49e82bff9373bbfb863caf88a221f4d0",
+  "pages": {
+    "index.html": {
+      "language": "ja",
+      "total": 170,
+      "categories": {
+        "paper": 52,
+        "grant": 24,
+        "award": 8,
+        "book": 4,
+        "review": 19,
+        "press": 6,
+        "outreach": 4,
+        "intl": 25,
+        "service": 28
+      },
+      "body_sha256": "24d883602117052993fbbbc1f50bafc838bc99b99954116009a21252522c463a",
+      "achievement_template_sha256": "b99f64bf55222981d95332e1341629e8f1f1f67921ac393394ac7c22a00de292",
+      "linkedin_links": 2
+    },
+    "index_en.html": {
+      "language": "en",
+      "total": 109,
+      "categories": {
+        "paper": 37,
+        "grant": 14,
+        "award": 5,
+        "intl": 25,
+        "service": 28
+      },
+      "body_sha256": "ef4e8ae4bb446d7552074007c9746fbd85b177e40e83fc1509c7eeae93d28e7d",
+      "achievement_template_sha256": "4009657f3911ea21cbe047addbefe6db87311c677f825f41c6bf6742c8d486f5",
+      "linkedin_links": 2
+    }
+  },
+  "original_sha256": {
+    "index.html": "2f2716d9d0b2c490bbdfe604e6c63f51f3da9586fa1be84975f6d9035ab0bee7",
+    "index_en.html": "e6a56149195e5b599d81deb654c66f8039651e0afe67d7f57498d4aa96f10f3f",
+    "assets/js/site-v3.js": "3ed3a9be58bfdfd234ae492c5619fac7e5d501958ca13df5406d7aa7106d805f"
+  },
+  "installed_sha256": {
+    "index.html": "2e1fe4aced8178c995e4e369cae3399fc9c99b4bb87f3b53d9e8c91167f33f27",
+    "index_en.html": "f236a976eaef4379b2b5f8c270eb361672e91a514bd07488bb518371b03e1826",
+    "assets/js/site-v3.js": "27f8445de8febd9f8de16a5ba6b12c27e4e793a0bf3a3f25e6adf73133204307",
+    "assets/css/hp04-noto.css": "8e13d69975018723c3d403babd59bdf4308614eee20ae81a83cc0fa679cdfc65",
+    "assets/js/hp04-ui.js": "99705fc2811e873a3094a675e3cd56c6314e17c9ac1d19aaf1a4e9e184952915"
+  },
+  "notes": "Body and achievement templates are unchanged. Original site-build version and workflows are retained."
+}
